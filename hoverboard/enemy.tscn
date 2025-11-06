@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://c07fnogr6gvp8"]
+
+[ext_resource type="Texture2D" uid="uid://dv4ql0iuj5k3f" path="res://addons/kenney_prototypeTextures/PNG/Red/texture_08.png" id="1_7k104"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_4gyqm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qi2p4"]
+albedo_texture = ExtResource("1_7k104")
+albedo_texture_force_srgb = true
+uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7k104"]
+
+[node name="Enemy" type="CharacterBody3D" groups=["ZTargetable"]]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_4gyqm")
+surface_material_override/0 = SubResource("StandardMaterial3D_qi2p4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_7k104")
+debug_color = Color(1, 1, 1, 0.42)

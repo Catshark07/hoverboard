@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://731jhfo60xio"]
+
+[ext_resource type="PackedScene" uid="uid://ey61hfj0wjkp" path="res://Charachter.tscn" id="1_ydtnl"]
+[ext_resource type="PackedScene" uid="uid://wmf2eu0uuhrg" path="res://addons/third-person-camera/third_person_camera/ThirdPersonCamera.tscn" id="2_yt2o6"]
+
+[node name="playerGroup" type="Node3D"]
+
+[node name="Player" parent="." instance=ExtResource("1_ydtnl")]
+transform = Transform3D(0.999997, 0.00234442, -0.00106931, -0.00234542, 0.999997, -0.000930822, 0.00106712, 0.000933327, 0.999999, -12.0264, 0.719091, 0)
+
+[node name="ThirdPersonCamera" parent="Player" instance=ExtResource("2_yt2o6")]
+transform = Transform3D(1, 3.91992e-10, 5.82077e-10, 8.52538e-10, 1, -5.82077e-11, -9.31323e-10, 2.32831e-10, 1, 0.00331688, -0.00589526, -0.00557424)
+distance_from_pivot = 2.0
+pivot_offset = Vector2(0, 0.5)
+tilt_upper_limit_deg = 20.0
+tilt_lower_limit_deg = -80.0
+camera_speed = 0.2
+follow_target = 1
+mouse_x_sensitiveness = 3.0
+spring_arm_collision_mask = 2
+spring_arm_margin = 0.0
+
+[node name="RotationPivot" parent="Player/ThirdPersonCamera" index="0"]
+transform = Transform3D(0.999983, 0, 0, 0, 0.939696, 0.341772, 0, -0.341776, 0.939686, -12.0231, 0.713193, -0.0055762)
+
+[node name="OffsetPivot" parent="Player/ThirdPersonCamera/RotationPivot" index="0"]
+transform = Transform3D(0.994737, 2.08705e-12, 1.79441e-07, -7.87897e-07, 0.991584, 0.000153482, -4.58098e-06, -0.000474185, 0.995929, 0, 0.5, -1.49012e-08)
+
+[node name="CameraSpringArm" parent="Player/ThirdPersonCamera/RotationPivot/OffsetPivot" index="0"]
+collision_mask = 2
+spring_length = 2.0
+margin = 0.0
+
+[node name="CameraMarker" parent="Player/ThirdPersonCamera/RotationPivot/OffsetPivot/CameraSpringArm" index="0"]
+transform = Transform3D(1.0005, -2.43294e-06, -7.04744e-06, 1.4462e-06, 1.00362, 0.000416905, 3.92673e-06, -6.81281e-05, 1.0031, -0.00201988, 0.000154018, 2.00836)
+
+[node name="Camera" parent="Player/ThirdPersonCamera" index="2"]
+transform = Transform3D(0.999999, 0.000365832, -0.00100512, 0, 0.939693, 0.34202, 0.00106962, -0.34202, 0.939692, -12.0251, 1.86708, 1.70292)
+
+[editable path="Player/ThirdPersonCamera"]

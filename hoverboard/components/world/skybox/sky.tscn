@@ -1,0 +1,111 @@
+[gd_scene load_steps=18 format=3 uid="uid://bbsji4vjbn0ds"]
+
+[ext_resource type="Shader" uid="uid://d35e3okoon1o" path="res://components/world/skybox/sky.gdshader" id="1_ll6wl"]
+[ext_resource type="Script" uid="uid://rir8lgdysi6r" path="res://components/world/skybox/sky.gd" id="2_gulhe"]
+
+[sub_resource type="Gradient" id="Gradient_7qve3"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ctf63"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mla47"]
+seamless = true
+color_ramp = SubResource("Gradient_7qve3")
+noise = SubResource("FastNoiseLite_ctf63")
+
+[sub_resource type="Gradient" id="Gradient_gq1h5"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_11csg"]
+noise_type = 2
+fractal_octaves = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_op05m"]
+seamless = true
+seamless_blend_skirt = 0.26
+color_ramp = SubResource("Gradient_gq1h5")
+noise = SubResource("FastNoiseLite_11csg")
+
+[sub_resource type="Gradient" id="Gradient_ujrlq"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_f1mpw"]
+noise_type = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g6a31"]
+seamless = true
+seamless_blend_skirt = 0.22
+color_ramp = SubResource("Gradient_ujrlq")
+noise = SubResource("FastNoiseLite_f1mpw")
+
+[sub_resource type="Gradient" id="Gradient_wefbp"]
+offsets = PackedFloat32Array(0.0488432, 0.958869)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vhcqn"]
+noise_type = 2
+frequency = 0.1395
+fractal_type = 2
+fractal_octaves = 1
+fractal_lacunarity = 10.0
+fractal_gain = 1.0
+cellular_distance_function = 2
+cellular_jitter = 2.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_epjnj"]
+width = 1000
+height = 1000
+invert = true
+seamless = true
+color_ramp = SubResource("Gradient_wefbp")
+noise = SubResource("FastNoiseLite_vhcqn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_skb5j"]
+shader = ExtResource("1_ll6wl")
+shader_parameter/day_bottom_color = Color(0.390044, 0.391472, 0.371424, 1)
+shader_parameter/day_top_color = Color(0, 0, 0, 1)
+shader_parameter/sunset_bottom_color = Color(0.295212, 0.194217, 0.146111, 1)
+shader_parameter/sunset_top_color = Color(0.178885, 0.185556, 0.26202, 1)
+shader_parameter/night_bottom_color = Color(0, 0, 0, 1)
+shader_parameter/night_top_color = Color(0, 0, 0, 1)
+shader_parameter/horizon_color_day = Color(0.340256, 0.215639, 0.0778858, 1)
+shader_parameter/horizon_color_sunset = Color(0.637845, 0.505682, 0.406071, 1)
+shader_parameter/horizon_color_night = Color(0.161832, 0.0912553, 0.201148, 1)
+shader_parameter/horizon_falloff = 0.9
+shader_parameter/sun_col = Color(1, 1, 1, 1)
+shader_parameter/sun_set_col = Color(1, 0.886153, 0.719505, 1)
+shader_parameter/sun_size = 0.1
+shader_parameter/sun_blur = 0.01
+shader_parameter/moon_col = Color(1, 1, 1, 1)
+shader_parameter/moon_size = 0.1
+shader_parameter/moon_crescent_offset = 0.0560001
+shader_parameter/clouds_texture = SubResource("NoiseTexture2D_g6a31")
+shader_parameter/clouds_distort_texture = SubResource("NoiseTexture2D_mla47")
+shader_parameter/clouds_noise_texture = SubResource("NoiseTexture2D_op05m")
+shader_parameter/clouds_sunset_color = Color(1, 1, 1, 1)
+shader_parameter/clouds_main_color = Color(0.424895, 0.403589, 0.295749, 1)
+shader_parameter/clouds_edge_color = Color(0.685906, 0.332743, 0.308971, 1)
+shader_parameter/clouds_speed = 0.05
+shader_parameter/clouds_scale = 0.18
+shader_parameter/clouds_cutoff = 0.13
+shader_parameter/clouds_fuzziness = 0.16
+shader_parameter/stars_texture = SubResource("NoiseTexture2D_epjnj")
+shader_parameter/stars_cutoff = 0.9
+shader_parameter/stars_speed = 0.001
+
+[sub_resource type="Sky" id="Sky_d31hn"]
+sky_material = SubResource("ShaderMaterial_skb5j")
+
+[sub_resource type="Environment" id="Environment_l251r"]
+background_mode = 2
+sky = SubResource("Sky_d31hn")
+ambient_light_color = Color(0.886275, 0.968627, 0.968627, 1)
+ambient_light_sky_contribution = 0.5
+ambient_light_energy = 0.1
+glow_hdr_threshold = 1.72
+glow_hdr_luminance_cap = 0.0
+fog_mode = 1
+fog_density = 1.0
+volumetric_fog_density = 0.0
+adjustment_enabled = true
+adjustment_brightness = 1.5
+
+[node name="Sky" type="WorldEnvironment"]
+environment = SubResource("Environment_l251r")
+script = ExtResource("2_gulhe")

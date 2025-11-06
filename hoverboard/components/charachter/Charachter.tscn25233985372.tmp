@@ -1,0 +1,311 @@
+[gd_scene load_steps=23 format=3 uid="uid://ey61hfj0wjkp"]
+
+[ext_resource type="Script" uid="uid://bwocbm3wbrtum" path="res://temp/g&msImport/scripts/charachter.gd" id="1_5qsce"]
+[ext_resource type="Shape3D" uid="uid://b7cfl66mox0bm" path="res://components/charachter/CharachterLifter.tres" id="2_3alaj"]
+[ext_resource type="PackedScene" uid="uid://0eqpbe1tec0e" path="res://temp/g&msImport/scenes/UI/StateChartDebuggerViewport.tscn" id="2_b5btr"]
+[ext_resource type="Script" uid="uid://dbv88mwwe2fin" path="res://addons/godot_state_charts/state_chart.gd" id="2_btd5s"]
+[ext_resource type="Texture2D" uid="uid://j6tvguv3e077" path="res://temp/g&msImport/art/textures/staminaRing.png" id="2_mexba"]
+[ext_resource type="PackedScene" uid="uid://dx07ocpkrcd7v" path="res://Blender/Dryad.blend" id="2_ru0v3"]
+[ext_resource type="Script" uid="uid://djjwqu5qf6w63" path="res://temp/g&msImport/scenes/stamina_bar.gd" id="3_nxe45"]
+[ext_resource type="Script" uid="uid://bw632x8vx42i0" path="res://addons/godot_state_charts/compound_state.gd" id="5_soxx2"]
+[ext_resource type="Script" uid="uid://b4jlh4pnw5eto" path="res://addons/godot_state_charts/atomic_state.gd" id="7_haehw"]
+[ext_resource type="Script" uid="uid://b5nhb7kb6tn3a" path="res://addons/godot_state_charts/parallel_state.gd" id="7_uo1rj"]
+[ext_resource type="Script" uid="uid://cek0sos7afkke" path="res://addons/godot_state_charts/transition.gd" id="8_kyisp"]
+[ext_resource type="Script" uid="uid://dkgn6im63sktl" path="res://addons/godot_state_charts/expression_guard.gd" id="13_kae2c"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3alaj"]
+radius = 0.2
+height = 1.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3alaj"]
+height = 0.0341187
+radius = 0.2
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_3alaj"]
+length = 0.0724345
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fynpa"]
+viewport_path = NodePath("CharUI/CharUIVP")
+
+[sub_resource type="Resource" id="Resource_ru0v3"]
+script = ExtResource("13_kae2c")
+expression = "Sprinting
+"
+metadata/_custom_type_script = "uid://dkgn6im63sktl"
+
+[sub_resource type="Resource" id="Resource_uo1rj"]
+script = ExtResource("13_kae2c")
+expression = "Landed"
+metadata/_custom_type_script = "uid://dkgn6im63sktl"
+
+[sub_resource type="Resource" id="Resource_3alaj"]
+script = ExtResource("13_kae2c")
+expression = "!Shifting"
+metadata/_custom_type_script = "uid://dkgn6im63sktl"
+
+[sub_resource type="Resource" id="Resource_wn67g"]
+script = ExtResource("13_kae2c")
+expression = "Shifting"
+metadata/_custom_type_script = "uid://dkgn6im63sktl"
+
+[sub_resource type="Resource" id="Resource_75ebv"]
+script = ExtResource("13_kae2c")
+expression = "Shifting"
+
+[sub_resource type="Curve3D" id="Curve3D_ru0v3"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.130069, 0, -0.0966031, 0, 0, 0, 0, 0, 0, 0.163565, 0, -0.103871, 0, 0, 0, 0, 0, 0, 0.153391, 0, 0.128711, 0, 0, 0, 0, 0, 0, -0.134431, 0, 0.104002),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[node name="Player" type="CharacterBody3D"]
+floor_snap_length = 1.0
+script = ExtResource("1_5qsce")
+RUN_SPEED = 2.5
+WALK_SPEED = 1.25
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.250381, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_3alaj")
+
+[node name="Dryad" parent="." instance=ExtResource("2_ru0v3")]
+transform = Transform3D(-0.8, 0, -1.20797e-07, 0, 0.8, 0, 1.20797e-07, 0, -0.8, 0, 0.122377, 0.0417711)
+
+[node name="GroundDetector" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.250381, 0)
+collision_layer = 2
+collision_mask = 2
+
+[node name="GroundDetector" type="CollisionShape3D" parent="GroundDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00107368, -0.496137, 0.000804424)
+shape = SubResource("CylinderShape3D_3alaj")
+debug_color = Color(0.971746, 0, 0.445839, 0.42)
+
+[node name="GroundDetector2" type="CollisionShape3D" parent="GroundDetector"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.48, 0)
+shape = SubResource("SeparationRayShape3D_3alaj")
+debug_color = Color(0.971746, 0, 0.445839, 0.42)
+
+[node name="Lifter" type="CollisionShape3D" parent="."]
+shape = ExtResource("2_3alaj")
+debug_color = Color(1.92523e-06, 0.567774, 0.855921, 0.42)
+
+[node name="LifterShapeCast" type="ShapeCast3D" parent="Lifter"]
+shape = ExtResource("2_3alaj")
+target_position = Vector3(0, -0.2, 0)
+collision_mask = 2
+
+[node name="LifterShapeCastUp" type="ShapeCast3D" parent="Lifter"]
+shape = ExtResource("2_3alaj")
+target_position = Vector3(0, 0, 0)
+
+[node name="CharUI" type="Sprite3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.404201, 0.210181, 0)
+billboard = 1
+texture_filter = 0
+texture = SubResource("ViewportTexture_fynpa")
+region_rect = Rect2(-64, -56, 128, 112)
+
+[node name="CharUIVP" type="SubViewport" parent="CharUI"]
+transparent_bg = true
+snap_2d_transforms_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(200, 200)
+
+[node name="Stamina Bar" type="TextureProgressBar" parent="CharUI/CharUIVP"]
+texture_filter = 3
+offset_right = 100.0
+offset_bottom = 100.0
+fill_mode = 4
+texture_under = ExtResource("2_mexba")
+texture_progress = ExtResource("2_mexba")
+tint_under = Color(0.237539, 0.237539, 0.237539, 0.580392)
+script = ExtResource("3_nxe45")
+
+[node name="StateChartDebuggerVP" parent="." instance=ExtResource("2_b5btr")]
+
+[node name="StateChartDebugger" parent="StateChartDebuggerVP" index="0"]
+initial_node_to_watch = NodePath("../../StateChart")
+
+[node name="doubletap_timer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="crouch_buffer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("2_btd5s")
+
+[node name="ParallelState" type="Node" parent="StateChart"]
+script = ExtResource("7_uo1rj")
+metadata/_custom_type_script = "uid://b5nhb7kb6tn3a"
+
+[node name="XYMovement" type="Node" parent="StateChart/ParallelState"]
+script = ExtResource("5_soxx2")
+initial_state = NodePath("idle")
+
+[node name="On sprinting" type="Node" parent="StateChart/ParallelState/XYMovement"]
+script = ExtResource("8_kyisp")
+to = NodePath("../Move/sprinting")
+guard = SubResource("Resource_ru0v3")
+delay_in_seconds = ""
+
+[node name="On jump" type="Node" parent="StateChart/ParallelState/XYMovement"]
+script = ExtResource("8_kyisp")
+to = NodePath("../Jump")
+event = &"jumping"
+delay_in_seconds = "0.0"
+
+[node name="On Fall" type="Node" parent="StateChart/ParallelState/XYMovement"]
+script = ExtResource("8_kyisp")
+to = NodePath("../Fall")
+event = &"falling"
+delay_in_seconds = "0.0"
+
+[node name="Jump" type="Node" parent="StateChart/ParallelState/XYMovement"]
+script = ExtResource("7_haehw")
+metadata/_custom_type_script = "uid://b4jlh4pnw5eto"
+
+[node name="Fall" type="Node" parent="StateChart/ParallelState/XYMovement"]
+script = ExtResource("7_haehw")
+metadata/_custom_type_script = "uid://b4jlh4pnw5eto"
+
+[node name="On landing" type="Node" parent="StateChart/ParallelState/XYMovement/Fall"]
+script = ExtResource("8_kyisp")
+to = NodePath("../..")
+guard = SubResource("Resource_uo1rj")
+delay_in_seconds = "0.0"
+metadata/_custom_type_script = "uid://cek0sos7afkke"
+
+[node name="idle" type="Node" parent="StateChart/ParallelState/XYMovement"]
+script = ExtResource("5_soxx2")
+initial_state = NodePath("Standing")
+
+[node name="Crouching" type="Node" parent="StateChart/ParallelState/XYMovement/idle"]
+script = ExtResource("7_haehw")
+
+[node name="On Moving" type="Node" parent="StateChart/ParallelState/XYMovement/idle/Crouching"]
+script = ExtResource("8_kyisp")
+to = NodePath("../../../Move/walking")
+event = &"Move"
+delay_in_seconds = "0.0"
+
+[node name="On stand" type="Node" parent="StateChart/ParallelState/XYMovement/idle/Crouching"]
+script = ExtResource("8_kyisp")
+to = NodePath("../../Standing")
+guard = SubResource("Resource_3alaj")
+delay_in_seconds = "0.0"
+
+[node name="Standing" type="Node" parent="StateChart/ParallelState/XYMovement/idle"]
+script = ExtResource("7_haehw")
+
+[node name="On crouch" type="Node" parent="StateChart/ParallelState/XYMovement/idle/Standing"]
+script = ExtResource("8_kyisp")
+to = NodePath("../../Crouching")
+guard = SubResource("Resource_wn67g")
+delay_in_seconds = "0.0"
+
+[node name="On Moving" type="Node" parent="StateChart/ParallelState/XYMovement/idle/Standing"]
+script = ExtResource("8_kyisp")
+to = NodePath("../../../Move/running")
+event = &"Move"
+delay_in_seconds = "0.0"
+
+[node name="Move" type="Node" parent="StateChart/ParallelState/XYMovement"]
+script = ExtResource("5_soxx2")
+initial_state = NodePath("running")
+
+[node name="running" type="Node" parent="StateChart/ParallelState/XYMovement/Move"]
+script = ExtResource("7_haehw")
+
+[node name="walking" type="Node" parent="StateChart/ParallelState/XYMovement/Move"]
+script = ExtResource("7_haehw")
+
+[node name="sprinting" type="Node" parent="StateChart/ParallelState/XYMovement/Move"]
+script = ExtResource("7_haehw")
+
+[node name="On expiration" type="Node" parent="StateChart/ParallelState/XYMovement/Move/sprinting"]
+script = ExtResource("8_kyisp")
+to = NodePath("../../walking")
+event = &"Stamina_expired"
+delay_in_seconds = "0.0"
+
+[node name="On running" type="Node" parent="StateChart/ParallelState/XYMovement/Move"]
+script = ExtResource("8_kyisp")
+to = NodePath("../running")
+event = &"Unshift"
+delay_in_seconds = "0.0"
+
+[node name="On idle" type="Node" parent="StateChart/ParallelState/XYMovement/Move"]
+script = ExtResource("8_kyisp")
+to = NodePath("../../idle")
+event = &"Idle"
+delay_in_seconds = "0.0
+
+"
+
+[node name="On walking" type="Node" parent="StateChart/ParallelState/XYMovement/Move"]
+script = ExtResource("8_kyisp")
+to = NodePath("../walking")
+guard = SubResource("Resource_75ebv")
+delay_in_seconds = "0.0"
+
+[node name="Stair" type="Node" parent="StateChart/ParallelState"]
+script = ExtResource("5_soxx2")
+initial_state = NodePath("Flat")
+metadata/_custom_type_script = "uid://bw632x8vx42i0"
+
+[node name="vault" type="Node" parent="StateChart/ParallelState/Stair"]
+script = ExtResource("7_haehw")
+metadata/_custom_type_script = "uid://b4jlh4pnw5eto"
+
+[node name="Upstair" type="Node" parent="StateChart/ParallelState/Stair"]
+script = ExtResource("7_haehw")
+metadata/_custom_type_script = "uid://b4jlh4pnw5eto"
+
+[node name="Downstair" type="Node" parent="StateChart/ParallelState/Stair"]
+script = ExtResource("7_haehw")
+metadata/_custom_type_script = "uid://b4jlh4pnw5eto"
+
+[node name="Flat" type="Node" parent="StateChart/ParallelState/Stair"]
+script = ExtResource("7_haehw")
+metadata/_custom_type_script = "uid://b4jlh4pnw5eto"
+
+[node name="On upstep" type="Node" parent="StateChart/ParallelState/Stair/Flat"]
+script = ExtResource("8_kyisp")
+to = NodePath("../../Upstair")
+event = &"upstep"
+delay_in_seconds = "0.0"
+
+[node name="On downstep" type="Node" parent="StateChart/ParallelState/Stair/Flat"]
+script = ExtResource("8_kyisp")
+to = NodePath("../../Downstair")
+event = &"downstep"
+delay_in_seconds = "0.0"
+
+[node name="Path3D" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.445, 0)
+curve = SubResource("Curve3D_ru0v3")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(0.0247419, 0, -0.999653, 0, 1, 0, 0.999653, 0, 0.0247419, -0.130069, 0, -0.0966031)
+
+[connection signal="area_shape_entered" from="GroundDetector" to="." method="_on_ground_detector_area_shape_entered"]
+[connection signal="timeout" from="doubletap_timer" to="." method="_on_doubletap_timer_timeout"]
+[connection signal="timeout" from="crouch_buffer" to="." method="_on_crouch_buffer_timeout"]
+[connection signal="state_entered" from="StateChart/ParallelState/XYMovement/Jump" to="." method="_on_jump_state_entered"]
+[connection signal="state_entered" from="StateChart/ParallelState/XYMovement/Fall" to="." method="_on_fall_state_entered"]
+[connection signal="state_entered" from="StateChart/ParallelState/XYMovement/idle" to="." method="_on_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/ParallelState/XYMovement/idle/Crouching" to="." method="_on_crouching_state_entered"]
+[connection signal="state_entered" from="StateChart/ParallelState/XYMovement/idle/Standing" to="." method="_on_standing_state_entered"]
+[connection signal="state_exited" from="StateChart/ParallelState/XYMovement/Move" to="." method="_on_move_state_exited"]
+[connection signal="state_entered" from="StateChart/ParallelState/XYMovement/Move/running" to="." method="_on_running_state_entered"]
+[connection signal="state_entered" from="StateChart/ParallelState/XYMovement/Move/walking" to="." method="_on_walking_state_entered"]
+[connection signal="state_entered" from="StateChart/ParallelState/XYMovement/Move/sprinting" to="." method="_on_sprinting_state_entered"]
+
+[editable path="StateChartDebuggerVP"]

@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://wmf2eu0uuhrg"]
+
+[ext_resource type="Script" uid="uid://ch6odasli1nl1" path="res://addons/third-person-camera/third_person_camera/ThirdPersonCamera.gd" id="1_telmq"]
+[ext_resource type="Script" uid="uid://b7ggmri4vhviy" path="res://addons/third-person-camera/third_person_camera/CameraShakePreset.gd" id="2_436kf"]
+[ext_resource type="Resource" uid="uid://8wq0le7mywh4" path="res://addons/third-person-camera/third_person_camera/camera-shake-presets/DefaultCameraShakePreset.tres" id="2_idc07"]
+[ext_resource type="Script" uid="uid://di7w6wctehs08" path="res://addons/third-person-camera/third_person_camera/CameraShake.gd" id="2_y3uk4"]
+[ext_resource type="Resource" uid="uid://cn4iinuc23o7j" path="res://addons/third-person-camera/third_person_camera/camera-shake-presets/GentleSway.tres" id="3_iflr8"]
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_84uqy"]
+margin = 1.135
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2bjii"]
+albedo_color = Color(0.8, 0.686275, 0.215686, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ag7lb"]
+material = SubResource("StandardMaterial3D_2bjii")
+radius = 0.05
+height = 0.1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ybkhn"]
+top_radius = 0.0
+height = 0.938
+
+[node name="ThirdPersonCamera" type="Node3D"]
+script = ExtResource("1_telmq")
+shake_presets = Array[ExtResource("2_436kf")]([ExtResource("2_idc07"), ExtResource("3_iflr8")])
+
+[node name="RotationPivot" type="Node3D" parent="."]
+transform = Transform3D(0.999983, 0, 0, 0, 0.939717, 0.341938, 0, -0.341947, 0.939691, 0, 0, 0)
+top_level = true
+
+[node name="OffsetPivot" type="Node3D" parent="RotationPivot"]
+transform = Transform3D(1, 2.08665e-12, 1.78847e-07, -7.89845e-07, 1.00021, 5.01871e-05, -4.59032e-06, -5.56111e-05, 1.00027, 0, 0, 0)
+
+[node name="CameraSpringArm" type="SpringArm3D" parent="RotationPivot/OffsetPivot"]
+process_priority = 11
+shape = SubResource("SeparationRayShape3D_84uqy")
+spring_length = 10.0
+
+[node name="CameraMarker" type="Marker3D" parent="RotationPivot/OffsetPivot/CameraSpringArm"]
+transform = Transform3D(1, -2.36475e-06, -7.01318e-06, 1.4513e-06, 1.00046, 0.000261843, 3.92178e-06, 7.6592e-06, 1.00153, -1.78804e-06, 0.000265121, 9.99763)
+
+[node name="PivotDebug" type="MeshInstance3D" parent="RotationPivot/OffsetPivot"]
+mesh = SubResource("SphereMesh_ag7lb")
+
+[node name="CameraShaker" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+script = ExtResource("2_y3uk4")
+camera = NodePath("../Camera")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 6.73955e-16, -1.85168e-15, 0, 0.939693, 0.34202, 1.97051e-15, -0.34202, 0.939693, -1.85168e-14, 3.4202, 9.39692)
+top_level = true
+
+[node name="CameraDebug" type="MeshInstance3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.570638)
+mesh = SubResource("CylinderMesh_ybkhn")

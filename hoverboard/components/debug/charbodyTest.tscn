@@ -1,0 +1,182 @@
+[gd_scene load_steps=12 format=3 uid="uid://kdyh5nplrg74"]
+
+[ext_resource type="PackedScene" uid="uid://bbsji4vjbn0ds" path="res://components/world/skybox/sky.tscn" id="1_rtaym"]
+[ext_resource type="PackedScene" uid="uid://ey61hfj0wjkp" path="res://Charachter.tscn" id="2_pts8h"]
+[ext_resource type="PackedScene" uid="uid://wmf2eu0uuhrg" path="res://addons/third-person-camera/third_person_camera/ThirdPersonCamera.tscn" id="3_n8kyy"]
+[ext_resource type="Script" uid="uid://drnb3ofvng2l5" path="res://addons/Stairs3D/stairs_3d.gd" id="5_xwywk"]
+[ext_resource type="Texture2D" uid="uid://cigw7hsm4tigm" path="res://addons/kenney_prototypeTextures/PNG/Dark/texture_06.png" id="5_ynd4g"]
+[ext_resource type="PackedScene" path="res://enemy.tscn" id="6_ynd4g"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xwywk"]
+albedo_texture = ExtResource("5_ynd4g")
+albedo_texture_force_srgb = true
+uv1_scale = Vector3(100, 100, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hxg65"]
+material = SubResource("StandardMaterial3D_xwywk")
+size = Vector3(100, 1, 100)
+
+[sub_resource type="Curve3D" id="Curve3D_ynd4g"]
+bake_interval = 0.01
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -14.9778, 0, 0.856209, 0, 0, 0, 0, 0, 0, -6.54291, 0, -1.02031, 0, 0, 0, 0, 0, 0, 1.17955, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_xwywk"]
+size = Vector3(0.2, 10, 4)
+
+[sub_resource type="SphereMesh" id="SphereMesh_xwywk"]
+
+[node name="Main" type="Node3D"]
+
+[node name="Sky" parent="." instance=ExtResource("1_rtaym")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.0421023, 0.999113, 0, -0.999113, -0.0421023, 0, 0, 0)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.823134, 0)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_hxg65")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.3212, 0.797671, 11.6803)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+radius = 7.924
+height = 2.61084
+cone = true
+
+[node name="Stairs3D" type="Path3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -5.42576, -0.454464, 4.98603)
+curve = SubResource("Curve3D_ynd4g")
+script = ExtResource("5_xwywk")
+height = 5.286
+width = 3.61
+collision_layer = 3
+collision_mask = 3
+metadata/_custom_type_script = "uid://drnb3ofvng2l5"
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(0.999997, 0.00234442, -0.00106931, -0.00234542, 0.999997, -0.000930822, 0.00106712, 0.000933327, 0.999999, 7.05655, 6.95282, 0)
+
+[node name="Player" parent="." instance=ExtResource("2_pts8h")]
+transform = Transform3D(0.999997, 0.00234442, -0.00106931, -0.00234542, 0.999997, -0.000930822, 0.00106712, 0.000933327, 0.999999, -12.0264, 0.719091, 0)
+
+[node name="ThirdPersonCamera" parent="Player" instance=ExtResource("3_n8kyy")]
+transform = Transform3D(1, 3.91992e-10, 5.82077e-10, 8.52538e-10, 1, -5.82077e-11, -9.31323e-10, 2.32831e-10, 1, 0.00331688, -0.00589526, -0.00557424)
+distance_from_pivot = 2.0
+pivot_offset = Vector2(0, 0.5)
+tilt_upper_limit_deg = 20.0
+tilt_lower_limit_deg = -80.0
+camera_speed = 0.2
+follow_target = 1
+mouse_x_sensitiveness = 3.0
+spring_arm_collision_mask = 2
+spring_arm_margin = 0.0
+
+[node name="RotationPivot" parent="Player/ThirdPersonCamera" index="0"]
+transform = Transform3D(0.999983, 0, 0, 0, 0.939696, 0.341772, 0, -0.341776, 0.939686, -12.0231, 0.713193, -0.0055762)
+
+[node name="OffsetPivot" parent="Player/ThirdPersonCamera/RotationPivot" index="0"]
+transform = Transform3D(0.994737, 2.08705e-12, 1.79441e-07, -7.87899e-07, 0.991584, 0.000153661, -4.58098e-06, -0.000473171, 0.995928, 0, 0.5, 0)
+
+[node name="CameraSpringArm" parent="Player/ThirdPersonCamera/RotationPivot/OffsetPivot" index="0"]
+collision_mask = 2
+spring_length = 2.0
+margin = 0.0
+
+[node name="CameraMarker" parent="Player/ThirdPersonCamera/RotationPivot/OffsetPivot/CameraSpringArm" index="0"]
+transform = Transform3D(1.0005, -2.43293e-06, -7.04785e-06, 1.44622e-06, 1.00365, 0.000418633, 3.9267e-06, -6.75619e-05, 1.00311, -0.00201988, 0.000153899, 2.00836)
+
+[node name="Camera" parent="Player/ThirdPersonCamera" index="2"]
+transform = Transform3D(0.999999, 0.000365832, -0.00100512, 0, 0.939693, 0.34202, 0.00106962, -0.34202, 0.939692, -12.0251, 1.86708, 1.70292)
+
+[node name="Meshes" type="Node" parent="."]
+
+[node name="CSGMesh3D2" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(0.28726, -0.957853, 0, 0.957853, 0.28726, 0, 0, 0, 1, 0, 0, 0)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_xwywk")
+
+[node name="CSGMesh3D4" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(0.456756, -0.889592, 0, 0.889592, 0.456756, 0, 0, 0, 1, 0, 0, -4.49532)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_xwywk")
+
+[node name="CSGMesh3D5" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(0.634542, -0.772889, 0, 0.772889, 0.634542, 0, 0, 0, 1, 0, 0, -9.00115)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_xwywk")
+
+[node name="CSGMesh3D6" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(0.74249, -0.669857, 0, 0.669857, 0.74249, 0, 0, 0, 1, 0, 0, -13.4378)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_xwywk")
+
+[node name="CSGMesh3D7" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(0.857113, -0.515128, 0, 0.515128, 0.857113, 0, 0, 0, 1, 0, 0, -18.1145)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_xwywk")
+
+[node name="CSGMesh3D8" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(0.951728, -0.306942, 0, 0.306942, 0.951728, 0, 0, 0, 1, 0, 0, -22.8483)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_xwywk")
+
+[node name="CSGMesh3D9" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(1, 0.000628054, 0, -0.000628054, 1, 0, 0, 0, 1, 0, 0, -27.1467)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_xwywk")
+
+[node name="CSGMesh3D3" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(0.14484, -0.989455, 0, 0.989455, 0.14484, 0, 0, 0, 1, 0, 0, 4.51279)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("BoxMesh_xwywk")
+
+[node name="CSGMesh3D10" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.76176, -0.371877, 0)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("SphereMesh_xwywk")
+
+[node name="CSGMesh3D11" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.85313, -0.471972, 0)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("SphereMesh_xwywk")
+
+[node name="CSGMesh3D12" type="CSGMesh3D" parent="Meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.88306, -0.631111, 0)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+mesh = SubResource("SphereMesh_xwywk")
+
+[node name="Enemy" parent="." instance=ExtResource("6_ynd4g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3418, 0, -3.64873)
+
+[editable path="Player/ThirdPersonCamera"]

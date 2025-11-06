@@ -1,0 +1,97 @@
+[gd_scene load_steps=11 format=3 uid="uid://ey61hfj0wjkp"]
+
+[ext_resource type="Script" uid="uid://bwocbm3wbrtum" path="res://recycle/temp/g&msImport/scripts/charachter.gd" id="1_au4b5"]
+[ext_resource type="Texture2D" uid="uid://j6tvguv3e077" path="res://recycle/temp/g&msImport/art/textures/staminaRing.png" id="3_l4yiu"]
+[ext_resource type="Script" uid="uid://djjwqu5qf6w63" path="res://recycle/temp/g&msImport/scenes/stamina_bar.gd" id="4_vqit3"]
+[ext_resource type="PackedScene" uid="uid://0eqpbe1tec0e" path="res://recycle/temp/g&msImport/scenes/UI/StateChartDebuggerViewport.tscn" id="5_m2fon"]
+[ext_resource type="PackedScene" uid="uid://dd4081vbxy2tc" path="res://hoverboard.tscn" id="12_b41v8"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7raoc"]
+radius = 0.2
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_3alaj"]
+length = 0.0724345
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vdrla"]
+radius = 0.25
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hhm3l"]
+radius = 0.2
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fynpa"]
+viewport_path = NodePath("CharUI/CharUIVP")
+
+[node name="Player" type="CharacterBody3D"]
+floor_snap_length = 1.0
+script = ExtResource("1_au4b5")
+RUN_SPEED = 20.0
+WALK_SPEED = 10.0
+SPRINT_SPEED = 30.0
+stairStepDown = 0.0
+stairStepUp = 0.0
+
+[node name="GroundDetector" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.250381, 0)
+collision_layer = 2
+collision_mask = 2
+
+[node name="GroundDetector" type="CollisionShape3D" parent="GroundDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00107368, -0.496137, 0.000804424)
+shape = SubResource("SphereShape3D_7raoc")
+debug_color = Color(0.971746, 0, 0.445839, 0.42)
+
+[node name="GroundDetector2" type="CollisionShape3D" parent="GroundDetector"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.48, 0)
+shape = SubResource("SeparationRayShape3D_3alaj")
+debug_color = Color(0.971746, 0, 0.445839, 0.42)
+
+[node name="Lifter" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_vdrla")
+debug_color = Color(1.92523e-06, 0.567774, 0.855921, 0.42)
+
+[node name="LifterShapeCast" type="ShapeCast3D" parent="Lifter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.385372, 0)
+shape = SubResource("SphereShape3D_hhm3l")
+target_position = Vector3(0, -0.2, 0)
+collision_mask = 2
+
+[node name="CharUI" type="Sprite3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.404201, 0.210181, 0)
+billboard = 1
+texture_filter = 0
+texture = SubResource("ViewportTexture_fynpa")
+region_rect = Rect2(-64, -56, 128, 112)
+
+[node name="CharUIVP" type="SubViewport" parent="CharUI"]
+transparent_bg = true
+snap_2d_transforms_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(200, 200)
+
+[node name="Stamina Bar" type="TextureProgressBar" parent="CharUI/CharUIVP"]
+texture_filter = 3
+offset_right = 100.0
+offset_bottom = 100.0
+fill_mode = 4
+texture_under = ExtResource("3_l4yiu")
+texture_progress = ExtResource("3_l4yiu")
+tint_under = Color(0.237539, 0.237539, 0.237539, 0.580392)
+script = ExtResource("4_vqit3")
+
+[node name="StateChartDebuggerVP" parent="." instance=ExtResource("5_m2fon")]
+
+[node name="doubletap_timer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="crouch_buffer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="Hoverboard" parent="." instance=ExtResource("12_b41v8")]
+
+[connection signal="area_shape_entered" from="GroundDetector" to="." method="_on_ground_detector_area_shape_entered"]
+[connection signal="timeout" from="doubletap_timer" to="." method="_on_doubletap_timer_timeout"]
+[connection signal="timeout" from="crouch_buffer" to="." method="_on_crouch_buffer_timeout"]
+
+[editable path="StateChartDebuggerVP"]

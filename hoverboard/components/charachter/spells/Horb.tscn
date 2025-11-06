@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddhjy5xi10ufu"]
+
+[ext_resource type="Script" uid="uid://pyuhc2v03gih" path="res://components/charachter/spells/horb.gd" id="1_qj68c"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4mamk"]
+
+[node name="Horb" type="Node3D"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+script = ExtResource("1_qj68c")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_4mamk")
