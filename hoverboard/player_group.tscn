@@ -21,10 +21,10 @@ spring_arm_collision_mask = 2
 spring_arm_margin = 0.0
 
 [node name="RotationPivot" parent="Player/ThirdPersonCamera" index="0"]
-transform = Transform3D(0.999983, 0, 0, 0, 0.939696, 0.341772, 0, -0.341776, 0.939686, -12.0231, 0.713193, -0.0055762)
+transform = Transform3D(0.999983, 0, 0, 0, 0.939765, 0.341582, 0, -0.341585, 0.939755, -12.0231, 0.713193, -0.0055762)
 
 [node name="OffsetPivot" parent="Player/ThirdPersonCamera/RotationPivot" index="0"]
-transform = Transform3D(0.994737, 2.08705e-12, 1.79441e-07, -7.87897e-07, 0.991584, 0.000153482, -4.58098e-06, -0.000474185, 0.995929, 0, 0.5, -1.49012e-08)
+transform = Transform3D(0.994737, 2.08705e-12, 1.79441e-07, -7.87893e-07, 0.991577, 0.000152111, -4.58097e-06, -0.000474572, 0.995928, 0, 0.5, 1.49012e-08)
 
 [node name="CameraSpringArm" parent="Player/ThirdPersonCamera/RotationPivot/OffsetPivot" index="0"]
 collision_mask = 2
@@ -32,9 +32,9 @@ spring_length = 2.0
 margin = 0.0
 
 [node name="CameraMarker" parent="Player/ThirdPersonCamera/RotationPivot/OffsetPivot/CameraSpringArm" index="0"]
-transform = Transform3D(1.0005, -2.43294e-06, -7.04744e-06, 1.4462e-06, 1.00362, 0.000416905, 3.92673e-06, -6.81281e-05, 1.0031, -0.00201988, 0.000154018, 2.00836)
+transform = Transform3D(1.0005, -2.43306e-06, -7.04585e-06, 1.4462e-06, 1.00345, 0.000394821, 3.92649e-06, -3.27826e-05, 1.00307, -0.00201988, 0.000499368, 2.00836)
 
 [node name="Camera" parent="Player/ThirdPersonCamera" index="2"]
-transform = Transform3D(0.999999, 0.000365832, -0.00100512, 0, 0.939693, 0.34202, 0.00106962, -0.34202, 0.939692, -12.0251, 1.86708, 1.70292)
+transform = Transform3D(0.999999, 0.000365811, -0.00100506, 0, 0.939693, 0.34202, 0.00106956, -0.34202, 0.939692, -12.0251, 1.86712, 1.70303)
 
 [editable path="Player/ThirdPersonCamera"]
